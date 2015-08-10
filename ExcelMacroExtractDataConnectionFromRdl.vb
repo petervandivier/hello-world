@@ -76,7 +76,7 @@ Sub GetDataSourceInfo(ByVal FullFileText As String, myFile As String)
         posTextStart = InStr(TextStartNum, FullFileText, "<DataSource Name=") - 1
         posTextEnd = InStr(posTextStart, FullFileText, "</DataSource>") + Len("</DataSource>")
         dSourceText = Mid(FullFileText, posTextStart + 1, posTextEnd - posTextStart)
-        TextStartNum = TextStartNum + Len(dSourceText)
+        TextStartNum = posTextStart + Len(dSourceText)
 'get Name for this data source
         posTextStart = InStr(dSourceText, "<DataSource Name=") + Len("<DataSource Name=")
         posTextEnd = InStr(posTextStart, dSourceText, ">")
@@ -154,7 +154,7 @@ Sub GetDataSetInfo(ByVal FullFileText As String, myFile As String)
         posTextStart = InStr(TextStartNum, FullFileText, "<DataSet Name=") - 1
         posTextEnd = InStr(posTextStart, FullFileText, "</DataSet>") + Len("</DataSet>")
         dSetText = Mid(FullFileText, posTextStart + 1, posTextEnd - posTextStart)
-        TextStartNum = TextStartNum + Len(dSetText)
+        TextStartNum = posTextStart + Len(dSetText)
 'get Name for this data Set
         posTextStart = InStr(dSetText, "<DataSet Name=") + Len("<DataSet Name=")
         posTextEnd = InStr(posTextStart, dSetText, ">")
