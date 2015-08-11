@@ -30,6 +30,8 @@ Sub extractData()
 
         myFile = cell.Value
         Debug.Print myFile
+'escape fileOpen and read if it is not .rdl
+        If Right(myFile, 4) <> ".rdl" Then GoTo FileIsNotRdl
 'extract text of the target file to read into string manipulation
 'this method copied from http://www.excel-easy.com/vba/examples/read-data-from-text-file.html
         Open myDir & myFile For Input As #1
@@ -42,12 +44,15 @@ Sub extractData()
         Call subs.GetDataSetInfo(FullFileText, myFile)
         Call subs.GetDataSourceInfo(FullFileText, myFile)
 
+FileIsNotRdl:
 'set vars empty
         FullFileText = ""
         myFile = ""
         textline = ""
 
     Next cell
+	
+	Call subs.SetHeaders
 
     MsgBox "Success."
 End Sub
@@ -249,27 +254,37 @@ Sub PrintArray(Data, SheetName, StartRow, StartCol)
 
 End Sub
 
+Sub SetHeaders()
+    Application.ScreenUpdating = False
+    Worksheets("dataSource").Activate
+    Range("A1").Select
+    ActiveCell.Value = "dSourceName"
+    ActiveCell.Offset(0, 1).Value = "dSourceType"
+    ActiveCell.Offset(0, 2).Value = "dSourceType"
+    ActiveCell.Offset(0, 3).Value = "ServerName"
+    ActiveCell.Offset(0, 4).Value = "DbName"
+    ActiveCell.Offset(0, 5).Value = "dSourceRefName"
+    ActiveCell.Offset(0, 6).Value = "myFile"
+    ActiveCell.Offset(0, 7).Value = "dSourceCount"
 
+    Worksheets("dataSet").Activate
+    Range("A1").Select
+    ActiveCell.Value = "myFile"
+    ActiveCell.Offset(0, 1).Value = "dSetCount"
+    ActiveCell.Offset(0, 2).Value = "dSetText"
+    ActiveCell.Offset(0, 3).Value = "dSetName"
+    ActiveCell.Offset(0, 4).Value = "ParamCount"
+    ActiveCell.Offset(0, 5).Value = "Param"
+    ActiveCell.Offset(0, 6).Value = "dSetType"
+    ActiveCell.Offset(0, 7).Value = "EmbeddedDsetName"
+    ActiveCell.Offset(0, 8).Value = "CmdText"
+    ActiveCell.Offset(0, 9).Value = "dSetRefName"
+    ActiveCell.Offset(0, 10).Value = "dSetServerName"
+    
+    Worksheets("rdl").Activate
+    Application.ScreenUpdating = True
+End Sub
 
-
-'
-'Sub TestSub()
-'    Dim myFile As String
-'    'myFile = "C:\Users\pvandivier\Desktop\Db_Pdb_Bv\Home.rdl"
-'    myFile = "C:\Users\pvandivier\Desktop\Closing Calendar.rdl"
-'
-''extract text of the target file to read into string manipulation
-''this method copied from http://www.excel-easy.com/vba/examples/read-data-from-text-file.html
-'    Open myFile For Input As #1
-'    Do Until EOF(1)
-'        Line Input #1, textline
-'        FullFileText = FullFileText & textline
-'    Loop
-'    Close #1
-'
-'    'Call GetDataSourceInfo(FullFileText, myFile)
-'    Call GetDataSetInfo(FullFileText, myFile)
-'End Sub
 
 
 
