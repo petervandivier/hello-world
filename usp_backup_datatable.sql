@@ -14,7 +14,7 @@ as
 peterv		2015-09-11		create proc to backup datatables parameterized for dynamic table publishering & cross-db polination
 	meat & potatoes of create_table step plagiarized from SO user @David 
 	http://stackoverflow.com/a/317864/4709762
-	used snake_case_syntax instead of CamelCaseSyntax ( as is my wont ) to conform to maintenance plan sytle conventions
+	used snake_case_syntax instead of CamelCaseSyntax ( as is my wont ) to conform to maintenance plan style conventions
 
 */
 begin
