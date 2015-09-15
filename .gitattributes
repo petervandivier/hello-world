@@ -1,3 +1,5 @@
 # gitattributes file #
 
 *.sql text
+
+*.strings diff=localizablestrings
