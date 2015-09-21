@@ -26,6 +26,7 @@ peterv		2015-09-11		create proc to backup datatables parameterized for dynamic t
 	http://stackoverflow.com/a/317864/4709762
 	used snake_case_syntax instead of CamelCaseSyntax ( as is my wont ) to conform to maintenance plan style conventions
 peterv		2015-09-15		re-save with utf-8 encoding to test .git version recognition as text file WITH .gitattributs & .gitconf assist
+peterv		2015-09-16		ported to DB & 05 from 03 & added commented out debug text at end of proc
 */
 begin
 
@@ -264,6 +265,28 @@ cleanup:
 	drop table #sysobjects_for_usp_backup_datatable ;
 
 end ;
+
+/*
+
+declare
+	@publisher_database_name nvarchar( 255 ) = '',
+	@publisher_schema_name nvarchar( 255 ) = '',
+	@publisher_table_name nvarchar( 255 ) = '',
+	@subscriber_database_name nvarchar( 255 ) = '',
+	@subscriber_schema_name nvarchar( 255 ) = '',
+	@subscriber_table_name nvarchar( 255 ) = '',
+	@drop_publisher_option nvarchar( 255 ) = '' ;
+
+exec DbAdmin.dbo.usp_backup_datatable
+	@publisher_database_name,
+	@publisher_schema_name,
+	@publisher_table_name,
+	@subscriber_database_name,
+	@subscriber_schema_name,
+	@subscriber_table_name,
+	@drop_publisher_option ;
+
+*/
 
 go
 
