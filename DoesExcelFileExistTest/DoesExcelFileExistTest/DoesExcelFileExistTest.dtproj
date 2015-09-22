@@ -28,8 +28,8 @@
   </Configurations>
   <DTSPackages>
     <DtsPackage FormatVersion="3">
-      <Name>Package.dtsx</Name>
-      <FullPath>Package.dtsx</FullPath>
+      <Name>DoesExcelObjectExist.dtsx</Name>
+      <FullPath>DoesExcelObjectExist.dtsx</FullPath>
       <References />
     </DtsPackage>
   </DTSPackages>

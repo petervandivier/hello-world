@@ -6,7 +6,6 @@ Sub UnhideSheets()
 End Sub
 
 Sub rename()
-
     For Each c In Range("Table1[Column1]")
 	Cells.Replace What:=(c.value) _
 	, Replacement:=(c.offset(0,1).value) _
