@@ -42,6 +42,18 @@ Function removeSpecial(sInput As String) As String
     removeSpecial = sInput
 End Function
 
+Function Reverse(Text As String) As String
+    Dim i As Integer
+    Dim StrNew As String
+    Dim strOld As String
+    strOld = Trim(Text)
+    For i = 1 To Len(strOld)
+      StrNew = Mid(strOld, i, 1) & StrNew
+    Next i
+    Reverse = StrNew
+End Function
+
+
 Function getRGB1(rcell) As String
     Dim sColor As String
 
@@ -139,3 +151,4 @@ Switch2 = Switch(Test1, Result1, _
 	Test13, Result13, _
 	Test14, Result14)
 End Function
+
