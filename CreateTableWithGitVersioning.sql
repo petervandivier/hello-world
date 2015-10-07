@@ -6,7 +6,7 @@ if exists ( select *
 			where [object_id] = object_id( N'<schemaName,,>.<tableName,,>' ) and 
 				[type] in ( N'U' ) )
 begin
-	drop table <tableName,,> ;
+	drop table <schemaName,,>.<tableName,,> ;
 	print 'Dropped table <schemaName,,>.<tableName,,> SUCCESSFULLY! At time ' + convert( varchar, getdate(), 126 ) ;
 end ;
 go

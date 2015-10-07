@@ -20,12 +20,18 @@ End Sub
 
 
 
-Public Function rangeConcat(ByVal aRange As Range, Optional ByVal delimiter As String) As String
-    Dim ouputString As String
+Public Function rangeConcat(ByVal aRange As Range, Optional ByVal Delimiter As String, Optional DelimCatch As String) As String
+    Dim ouputString As String, cVal As String
     For Each c In aRange.Cells
-        outputString = outputString & c.Value & delimiter
+        cVal = c.Value
+        
+        If InStr(cVal, Delimiter) <> 0 And Not (IsEmpty(DelimCatch)) Then
+            cVal = DelimCatch + cVal + DelimCatch
+        End If
+        
+        outputString = outputString & cVal & Delimiter
     Next c
-    If delimiter = "" Then
+    If Delimiter = "" Then
         rangeConcat = outputString
     Else
         rangeConcat = Left(outputString, Len(outputString) - 1)
