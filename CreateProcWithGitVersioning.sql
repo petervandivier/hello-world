@@ -41,4 +41,8 @@ if exists ( select *
 begin
 	print 'Created proc <schemaName,,>.<procName,,> SUCCESSFULLY! At time ' + convert( varchar, getdate(), 126 ) ;
 end ;
+else
+begin
+	print 'Create proc <schemaName,,>.<procName,,> FAILED! At time ' + convert( varchar, getdate(), 126 ) ;
+end ; 
 go
