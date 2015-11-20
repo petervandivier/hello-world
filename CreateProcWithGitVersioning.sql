@@ -3,22 +3,22 @@ go
 
 if exists ( select * 
 			from sys.objects 
-			where [object_id] = object_id( N'<schemaName,,>.<procName,,>' ) and 
+			where [object_id] = object_id( N'<schemaName,,dbo>.<procName,,sp>' ) and 
 				[type] in ( N'P' ) )
 begin
-	drop proc <schemaName,,>.<procName,,>;
-	print 'Dropped proc <schemaName,,>.<procName,,> SUCCESSFULLY! At time ' + convert( varchar, getdate(), 126 );
+	drop proc <schemaName,,dbo>.<procName,,sp>;
+	print 'Dropped proc <schemaName,,dbo>.<procName,,sp> SUCCESSFULLY! At time ' + convert( varchar, getdate(), 126 );
 end;
 go
 
-create proc <schemaName,,>.<procName,,>
+create proc <schemaName,,dbo>.<procName,,sp>
 	<@param1,,> <dataType1,,>
 /*
-exec <schemaName,,>.<procName,,> <@param1,,> = <Param1Default,,>;
+exec <schemaName,,dbo>.<procName,,sp> <@param1,,> = <Param1Default,,>;
 */
 as
 /* who				when			what
-petervandivier		
+petervandivier		<CreateDate,,>	<Description,,>
 */
 begin
 	set nocount on;
@@ -31,13 +31,13 @@ go
 
 if exists ( select * 
 			from sys.objects 
-			where [object_id] = object_id( N'<schemaName,,>.<procName,,>' ) and 
+			where [object_id] = object_id( N'<schemaName,,dbo>.<procName,,sp>' ) and 
 				[type] in ( N'P' ) )
 begin
-	print 'Created proc <schemaName,,>.<procName,,> SUCCESSFULLY! At time ' + convert( varchar, getdate(), 126 );
+	print 'Created proc <schemaName,,dbo>.<procName,,sp> SUCCESSFULLY! At time ' + convert( varchar, getdate(), 126 );
 end;
 else
 begin
-	print 'Create proc <schemaName,,>.<procName,,> FAILED! At time ' + convert( varchar, getdate(), 126 );
+	print 'Create proc <schemaName,,dbo>.<procName,,sp> FAILED! At time ' + convert( varchar, getdate(), 126 );
 end; 
 go

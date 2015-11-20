@@ -24,9 +24,9 @@ create table <schemaName,,dbo>.<tableName,,>
 
 go
 
-alter table <schemaName,,dbo>.<tableName,,> add constraint df_<tableName,,>_InsertedBy default replace( user, 'GRCORP\', '' ) for InsertedBy;
+alter table <schemaName,,dbo>.<tableName,,> add constraint df_<tableName,,>_InsertedBy default replace( system_user, 'GRCORP\', '' ) for InsertedBy;
 alter table <schemaName,,dbo>.<tableName,,> add constraint df_<tableName,,>_InsertDatetime default getdate() for InsertDatetime;
-alter table <schemaName,,dbo>.<tableName,,> add constraint df_<tableName,,>_LastUpdateBy default replace( user, 'GRCORP\', '' ) for LastUpdateBy;
+alter table <schemaName,,dbo>.<tableName,,> add constraint df_<tableName,,>_LastUpdateBy default replace( system_user, 'GRCORP\', '' ) for LastUpdateBy;
 alter table <schemaName,,dbo>.<tableName,,> add constraint df_<tableName,,>_LastUpdateDatetime default getdate() for LastUpdateDatetime;
 alter table <schemaName,,dbo>.<tableName,,> add constraint df_<tableName,,>_Revision default 0 for Revision;
 
