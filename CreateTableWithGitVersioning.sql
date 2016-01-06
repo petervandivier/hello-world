@@ -1,11 +1,18 @@
 ﻿use <DbName,,>
 go
+-- select * from  <schemaName,,dbo>.<tableName,,>;
 
 if exists ( select * 
 			from sys.objects 
 			where [object_id] = object_id( N'<schemaName,,dbo>.<tableName,,>' ) and 
 				[type] in ( N'U' ) )
 begin
+	set nocount on;
+	
+	select * 
+	into #DropNpop_ <schemaName,,dbo><tableName,,>
+	from  <schemaName,,dbo>.<tableName,,>;
+
 	drop table <schemaName,,dbo>.<tableName,,>;
 	print 'Dropped table <schemaName,,dbo>.<tableName,,> SUCCESSFULLY! At time ' + convert( varchar, getdate(), 126 );
 end;
@@ -32,11 +39,59 @@ alter table <schemaName,,dbo>.<tableName,,> add constraint df_<tableName,,>_Revi
 
 go
 
+-- set identity_insert  <schemaName,,dbo>.<tableName,,> on;
+
+declare @sql nvarchar( max ) = ''; 
+
+select @sql += 
+	quotename( c1.name ) + ',' 
+from sys.columns c1
+join tempdb.sys.columns c2 on 
+	c2.name = c1.name and
+	c2.[object_id] = object_id( N'tempdb..#DropNpop_ <schemaName,,dbo><tableName,,>' )
+where c1.[object_id] = object_id( N' <schemaName,,dbo>.<tableName,,>' ) and 
+	c1.is_computed = 0;
+
+set @sql = left( @sql, len( @sql ) - 1 );
+	
+set @sql = 
+'insert  <schemaName,,dbo>.<tableName,,> 
+	(' + @sql + ') 
+select 
+	' + @sql + '
+from #DropNpop_ <schemaName,,dbo><tableName,,>;';
+
+exec sp_executesql @sql;
+
+-- set identity_insert  <schemaName,,dbo>.<tableName,,> off;
+
+go
+
 if exists ( select * 
 			from sys.objects 
 			where [object_id] = object_id( N'<schemaName,,dbo>.<tableName,,>' ) and 
 				[type] in ( N'U' ) )
 begin
 	print 'Created table <schemaName,,dbo>.<tableName,,> SUCCESSFULLY! At time ' + convert( varchar, getdate(), 126 );
+end;
+
+go
+
+create trigger tr_<tableName,,>_LogLastUpdate 
+on  <schemaName,,dbo>.<tableName,,>
+<TriggerWhen,,after> <TriggerWhat,,update>
+as
+/* who				when			what
+<Creator,,petervandivier>		<CreateDate,,>	<Description,,TRIGGER to log update revisions>
+*/
+begin
+	set nocount on;
+	
+	update  <schemaName,,dbo>.<tableName,,> set 
+		LastUpdateBy = replace( system_user, 'GRCORP\', '' ),
+		LastUpdateDatetime = getdate(),
+		Revision += 1
+	from  <schemaName,,dbo>.<tableName,,> a
+	join inserted b on a.<PK,,> = b.<PK,,>;
 end;
 go
