@@ -1,6 +1,6 @@
 ﻿use <DbName,,>
 go
--- select * from  <schemaName,,dbo>.<tableName,,>;
+-- select * from <schemaName,,dbo>.<tableName,,>;
 
 if exists ( select * 
 			from sys.objects 
@@ -10,8 +10,8 @@ begin
 	set nocount on;
 	
 	select * 
-	into #DropNpop_ <schemaName,,dbo><tableName,,>
-	from  <schemaName,,dbo>.<tableName,,>;
+	into #DropNpop_<schemaName,,dbo><tableName,,>
+	from <schemaName,,dbo>.<tableName,,>;
 
 	drop table <schemaName,,dbo>.<tableName,,>;
 	print 'Dropped table <schemaName,,dbo>.<tableName,,> SUCCESSFULLY! At time ' + convert( varchar, getdate(), 126 );
@@ -39,32 +39,37 @@ alter table <schemaName,,dbo>.<tableName,,> add constraint df_<tableName,,>_Revi
 
 go
 
--- set identity_insert  <schemaName,,dbo>.<tableName,,> on;
+if object_id( N'tempdb..#DropNpop_<schemaName,,dbo><tableName,,>' ) is not null
+begin
 
-declare @sql nvarchar( max ) = ''; 
+	-- set identity_insert <schemaName,,dbo>.<tableName,,> on;
 
-select @sql += 
-	quotename( c1.name ) + ',' 
-from sys.columns c1
-join tempdb.sys.columns c2 on 
-	c2.name = c1.name and
-	c2.[object_id] = object_id( N'tempdb..#DropNpop_ <schemaName,,dbo><tableName,,>' )
-where c1.[object_id] = object_id( N' <schemaName,,dbo>.<tableName,,>' ) and 
-	c1.is_computed = 0;
+	declare @sql nvarchar( max ) = ''; 
 
-set @sql = left( @sql, len( @sql ) - 1 );
+	select @sql += 
+		quotename( c1.name ) + ',' 
+	from sys.columns c1
+	join tempdb.sys.columns c2 on 
+		c2.name = c1.name and
+		c2.[object_id] = object_id( N'tempdb..#DropNpop_<schemaName,,dbo><tableName,,>' )
+	where c1.[object_id] = object_id( N'<schemaName,,dbo>.<tableName,,>' ) and 
+		c1.is_computed = 0;
+
+	set @sql = left( @sql, len( @sql ) - 1 );
+		
+	set @sql = 
+	'insert <schemaName,,dbo>.<tableName,,> 
+		(' + @sql + ') 
+	select 
+		' + @sql + '
+	from #DropNpop_<schemaName,,dbo><tableName,,>;';
+
+	exec sp_executesql @sql;
+
+	-- set identity_insert <schemaName,,dbo>.<tableName,,> off;
+
+end;
 	
-set @sql = 
-'insert  <schemaName,,dbo>.<tableName,,> 
-	(' + @sql + ') 
-select 
-	' + @sql + '
-from #DropNpop_ <schemaName,,dbo><tableName,,>;';
-
-exec sp_executesql @sql;
-
--- set identity_insert  <schemaName,,dbo>.<tableName,,> off;
-
 go
 
 if exists ( select * 
@@ -78,7 +83,7 @@ end;
 go
 
 create trigger tr_<tableName,,>_LogLastUpdate 
-on  <schemaName,,dbo>.<tableName,,>
+on <schemaName,,dbo>.<tableName,,>
 <TriggerWhen,,after> <TriggerWhat,,update>
 as
 /* who				when			what
@@ -87,11 +92,11 @@ as
 begin
 	set nocount on;
 	
-	update  <schemaName,,dbo>.<tableName,,> set 
+	update <schemaName,,dbo>.<tableName,,> set 
 		LastUpdateBy = replace( system_user, 'GRCORP\', '' ),
 		LastUpdateDatetime = getdate(),
 		Revision += 1
-	from  <schemaName,,dbo>.<tableName,,> a
+	from <schemaName,,dbo>.<tableName,,> a
 	join inserted b on a.<PK,,> = b.<PK,,>;
 end;
 go
