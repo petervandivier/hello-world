@@ -1,3 +1,17 @@
+Sub DimNulls()
+    Cells.FormatConditions.Delete
+    Range("A1:G23").Select
+    Selection.FormatConditions.Add Type:=xlCellValue, Operator:=xlEqual, _
+        Formula1:="=""NULL"""
+    Selection.FormatConditions(Selection.FormatConditions.Count).SetFirstPriority
+    With Selection.FormatConditions(1).Font
+        .ThemeColor = xlThemeColorDark1
+        .TintAndShade = -0.349986266670736
+    End With
+    Selection.FormatConditions(1).StopIfTrue = False
+End Sub
+
+
 Sub UnhideSheets()
   Dim ws As Worksheet
   For Each ws In Worksheets
