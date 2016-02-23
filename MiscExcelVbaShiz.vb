@@ -1,6 +1,6 @@
 Sub DimNulls()
     Cells.FormatConditions.Delete
-    Range("A1:G23").Select
+    Range("Table1").Select
     Selection.FormatConditions.Add Type:=xlCellValue, Operator:=xlEqual, _
         Formula1:="=""NULL"""
     Selection.FormatConditions(Selection.FormatConditions.Count).SetFirstPriority
