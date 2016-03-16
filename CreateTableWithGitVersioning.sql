@@ -20,29 +20,27 @@ go
 
 create table <schemaName,,dbo>.<tableName,,>
 (
+	<tableName,,>Id int not null identity,
+	<tableName,,>Name varchar( 100 ) not null constraint chk_<tableName,,>_NameIsNotEmpty check ( datalength( ltrim( rtrim( <tableName,,>Name ) ) ) > 0 ),
 	
-	InsertedBy varchar( 100 ) not null,
-	InsertDatetime datetime not null,
-	LastUpdateBy varchar( 100 ) not null,
-	LastUpdateDatetime datetime not null,
-	Revision int not null,
-	constraint pk_<tableName,,>_ primary key (  )
+	InsertedBy varchar( 100 ) not null constraint df_<tableName,,>_InsertedBy default replace( system_user, 'GRCORP\', '' ),
+	InsertDatetime datetime not null constraint df_<tableName,,>_InsertDatetime default getdate(),
+	LastUpdateBy varchar( 100 ) not null constraint df_<tableName,,>_LastUpdateBy default replace( system_user, 'GRCORP\', '' ),
+	LastUpdateDatetime datetime not null constraint df_<tableName,,>_LastUpdateDatetime default getdate(),
+	Revision int not null constraint df_<tableName,,>_Revision default 0,
+	constraint pk_<tableName,,>_Id primary key ( <tableName,,>Id )
 );
 
 go
 
-alter table <schemaName,,dbo>.<tableName,,> add constraint df_<tableName,,>_InsertedBy default replace( system_user, 'GRCORP\', '' ) for InsertedBy;
-alter table <schemaName,,dbo>.<tableName,,> add constraint df_<tableName,,>_InsertDatetime default getdate() for InsertDatetime;
-alter table <schemaName,,dbo>.<tableName,,> add constraint df_<tableName,,>_LastUpdateBy default replace( system_user, 'GRCORP\', '' ) for LastUpdateBy;
-alter table <schemaName,,dbo>.<tableName,,> add constraint df_<tableName,,>_LastUpdateDatetime default getdate() for LastUpdateDatetime;
-alter table <schemaName,,dbo>.<tableName,,> add constraint df_<tableName,,>_Revision default 0 for Revision;
+create unique nonclustered index ak_<tableName,,>_Name on <schemaName,,dbo>.<tableName,,> ( <tableName,,>Name );
 
 go
 
 if object_id( N'tempdb..#DropNpop_<schemaName,,dbo><tableName,,>' ) is not null
 begin
 
-	-- set identity_insert <schemaName,,dbo>.<tableName,,> on;
+	<HasId,-- ( no ),>set identity_insert <schemaName,,dbo>.<tableName,,> on;
 
 	declare @sql nvarchar( max ) = ''; 
 
@@ -66,7 +64,7 @@ begin
 
 	exec sp_executesql @sql;
 
-	-- set identity_insert <schemaName,,dbo>.<tableName,,> off;
+	<HasId,-- ( no ),> set identity_insert <schemaName,,dbo>.<tableName,,> off;
 
 end;
 	
