@@ -172,3 +172,52 @@ Switch2 = Switch(Test1, Result1, _
 	Test14, Result14)
 End Function
 
+
+Sub highlightext()
+'copied from http://stackoverflow.com/a/35438374/4709762
+	Application.ScreenUpdating = False
+
+	Dim ws As Worksheet
+	Set ws = Worksheets("Sheet1")
+
+	Dim oRange As Range
+	Set oRange = ws.Range("A:A")
+
+	Dim wordToFind As String
+	wordToFind = InputBox(Prompt:="What word would you like to highlight?")
+
+	Dim cellRange As Range
+	Set cellRange = oRange.Find(What:=wordToFind, LookIn:=xlValues, _
+						LookAt:=xlPart, SearchOrder:=xlByRows, SearchDirection:=xlNext, _
+						MatchCase:=False, SearchFormat:=False)
+
+	If Not cellRange Is Nothing Then
+
+		Dim Foundat As String
+		Foundat = cellRange.Address
+
+		Do
+
+			Dim textStart As Integer
+			textStart = 1
+
+			Do
+
+				'to compare lower case only use this
+				'textStart = InStr(textStart, LCase(cellRange.Value), LCase(wordToFind))
+				textStart = InStr(textStart, cellRange.Value, wordToFind)
+				If textStart <> 0 Then
+					cellRange.Characters(textStart, Len(wordToFind)).Font.Color = RGB(250, 0, 0)
+					textStart = textStart + 1
+				End If
+
+
+			Loop Until textStart = 0
+
+			Set cellRange = oRange.FindNext(After:=cellRange)
+
+		Loop Until cellRange Is Nothing Or cellRange.Address = Foundat
+
+	End If
+
+End Sub
