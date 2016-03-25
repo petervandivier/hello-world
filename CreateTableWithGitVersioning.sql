@@ -40,7 +40,7 @@ go
 if object_id( N'tempdb..#DropNpop_<schemaName,,dbo><tableName,,>' ) is not null
 begin
 
-	<HasId,-- ( no ),>set identity_insert <schemaName,,dbo>.<tableName,,> on;
+	<HasId,-- ( no ),-- >set identity_insert <schemaName,,dbo>.<tableName,,> on;
 
 	declare @sql nvarchar( max ) = ''; 
 
@@ -64,7 +64,7 @@ begin
 
 	exec sp_executesql @sql;
 
-	<HasId,-- ( no ),> set identity_insert <schemaName,,dbo>.<tableName,,> off;
+	<HasId,-- ( no ),-- > set identity_insert <schemaName,,dbo>.<tableName,,> off;
 
 end;
 	
