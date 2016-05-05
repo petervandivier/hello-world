@@ -1,27 +1,27 @@
-﻿use <DbName,,>
-go
+﻿USE <DbName,,>
+GO
 
-if object_id( N'<schemaName,,dbo>.<procName,,sp>' ) is null
-	exec sp_executesql N'create proc <schemaName,,dbo>.<procName,,sp> as begin return 0; end;';
-
-go
-
-alter proc <schemaName,,dbo>.<procName,,sp>
+IF object_id( N'<schemaName,,dbo>.<procName,,sp>' ) is null
+	EXEC sp_executesql N'CREATE PROC <schemaName,,dbo>.<procName,,sp> AS BEGIN; RETURN 0; END;';
+GO
+SET ANSI_NULLS, QUOTED_IDENTIFIER ON
+GO
+ALTER PROC <schemaName,,dbo>.<procName,,sp>
 	<@param1,,> <dataType1,,> = <Param1Default,,null>
 /* who				when			what
-<CreatedBy,,petervandivier>		<CreateDate,,>		<Description,,>
+<CREATEdBy,,petervandivier>		<CREATEDate,,>		<Description,,>
 
 -- TESTING FRAMEWORK
-exec <schemaName,,dbo>.<procName,,sp> 
+EXEC <schemaName,,dbo>.<procName,,sp> 
 	<@param1,,> = <Param1Default,,null>;
 
 */
-as
-begin
-	set nocount on;
-	set tran isolation level read uncommitted;
+AS
+BEGIN;
+	SET nocount ON;
+	SET tran isolation level READ UNCOMMITTED;
 
-	declare
+	DECLARE
 		@ProcName sysname = '<schemaName,,dbo>.<procName,,sp>',
 		@ProcRunDT datetime = getdate(),
 		@ErrMsg nvarchar( 4000 ) = '',
@@ -29,8 +29,7 @@ begin
 	
 ReturnResults:
 
-	return 0;
-end;
+	RETURN 0;
+END;
 
-go
-
+GO
