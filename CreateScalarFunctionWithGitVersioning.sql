@@ -13,8 +13,9 @@ RETURNS <ReturnType,datatype,>
 AS
 /************************************************************************************************
 -- Description : <PurposeOfFunction,,>
--- Date Developer Issue# - Description--------------- ------------------- ------------------------------------------------------------
--- <Today,,>	<WhoAmI,,petervandivier>		<Description1,,create function>
+-- Date 		Developer 		Issue# 		Description
+--------------- ------------------- ------------------------------------------------------------
+-- <Today,,>	<WhoAmI,,petervandivier>	<Issue#,,DAT-0000>	<Description1,,create function>
 --***********************************************************************************************
 -- testing purposes 
 

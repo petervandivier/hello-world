@@ -1,25 +1,28 @@
 ﻿USE <DbName,,>
 GO
 
-IF object_id( N'<schemaName,,dbo>.<procName,,sp>' ) is null
+IF object_id( N'<schemaName,,dbo>.<procName,,sp>' ) IS NULL
 	EXEC sp_executesql N'CREATE PROC <schemaName,,dbo>.<procName,,sp> AS BEGIN; RETURN 0; END;';
 GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER ON
 GO
 ALTER PROC <schemaName,,dbo>.<procName,,sp>
 	<@param1,,> <dataType1,,> = <Param1Default,,null>
-/* who				when			what
-<CREATEdBy,,petervandivier>		<CREATEDate,,>		<Description,,>
-
+/************************************************************************************************
+-- Description : <PurposeOfProc,,>
+-- Date 		Developer 		Issue# 		Description
+--------------- ------------------- ------------------------------------------------------------
+-- <Today,,>	<WhoAmI,,petervandivier>	<Issue#,,DAT-0000>	<Description1,,create proc>
+--***********************************************************************************************
 -- TESTING FRAMEWORK
 EXEC <schemaName,,dbo>.<procName,,sp> 
-	<@param1,,> = <Param1Default,,null>;
+	<@param1,,@> = <Param1Default,,null>;
 
 */
 AS
 BEGIN;
-	SET nocount ON;
-	SET tran isolation level READ UNCOMMITTED;
+	SET NOCOUNT ON;
+	SET TRAN ISOLATION LEVEL READ UNCOMMITTED;
 
 	DECLARE
 		@ProcName sysname = '<schemaName,,dbo>.<procName,,sp>',

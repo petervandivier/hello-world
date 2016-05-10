@@ -9,16 +9,17 @@ ALTER function <schema,sysname,dbo>.<name,sysname,udf_>
 (
 	<@Param1,,@> <Param1DataType,datatype,>
 )
-RETURNS <ResultTableName,,@>
+RETURNS <ResultTableName,,@> TABLE 
 (
-	<Col1DataType,datatype,int identity not null>
-	,<Col2DataType,datatype,>
+	<Col1Name,sysname,Id> <Col1DataType,datatype,int identity not null>
+	,<Col2Name,sysname,> <Col2DataType,datatype,>
 )
 AS
 /************************************************************************************************
 -- Description : <PurposeOfFunction,,>
--- Date Developer Issue# - Description--------------- ------------------- ------------------------------------------------------------
--- <Today,,>	<WhoAmI,,petervandivier>		<Description1,,create function>
+-- Date 		Developer 		Issue# 		Description
+--------------- ------------------- ------------------------------------------------------------
+-- <Today,,>	<WhoAmI,,petervandivier>	<Issue#,,DAT-0000>	<Description1,,create function>
 --***********************************************************************************************
 -- testing purposes 
 
@@ -31,9 +32,14 @@ BEGIN
 	DECLARE <@InScopeVar,,@> <InScopeVarDatatype,datatype,>;
 	SELECT <@InScopeVar,,@> = ;
 	
-	INSERT <ResultTableName,,@>( <Col2DataType,datatype,> )
+	INSERT <ResultTableName,,@>
+	( 
+		<Col1Name,sysname,Id>,
+		<Col2Name,sysname,>
+	)
 	SELECT 
-	
+		<Col1Name,sysname,Id>,
+		<Col2Name,sysname,>
 	FROM 
 	WHERE <@InScopeVar,,@> 
 	;
