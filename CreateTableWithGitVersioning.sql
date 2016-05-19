@@ -1,82 +1,82 @@
-﻿use <DbName,,>
-go
--- select * from <schemaName,,dbo>.<tableName,,>;
+﻿USE <DbName,,>
+GO
+-- SELECT * FROM <schemaName,,dbo>.<tableName,,>;
 
-if exists ( select * 
-			from sys.objects 
-			where [object_id] = object_id( N'<schemaName,,dbo>.<tableName,,>' ) and 
-				[type] in ( N'U' ) )
-begin
-	set nocount on;
+IF EXISTS ( SELECT * 
+			FROM sys.objects 
+			WHERE [object_id] = object_id( N'<schemaName,,dbo>.<tableName,,>' ) 
+				AND [type] in ( N'U' ) )
+BEGIN
+	SET NOCOUNT ON;
 	
-	select * 
-	into #DropNpop_<schemaName,,dbo><tableName,,>
-	from <schemaName,,dbo>.<tableName,,>;
+	SELECT * 
+	INTO #DropNpop_<schemaName,,dbo><tableName,,>
+	FROM <schemaName,,dbo>.<tableName,,>;
 
-	drop table <schemaName,,dbo>.<tableName,,>;
-	print 'Dropped table <schemaName,,dbo>.<tableName,,> SUCCESSFULLY! At time ' + convert( varchar, getdate(), 126 );
-end;
-go
+	DROP TABLE <schemaName,,dbo>.<tableName,,>;
+	PRINT 'Dropped table <schemaName,,dbo>.<tableName,,> SUCCESSFULLY! At time ' + convert( varchar, getdate(), 126 );
+END;
+GO
 
-create table <schemaName,,dbo>.<tableName,,>
+CREATE TABLE <schemaName,,dbo>.<tableName,,>
 (
-	<tableName,,>Id int not null identity,
-	<tableName,,>Name varchar( 100 ) not null constraint chk_<tableName,,>_NameIsNotEmpty check ( datalength( ltrim( rtrim( <tableName,,>Name ) ) ) > 0 ),
+	<tableName,,>Id int NOT NULL identity,
+	<tableName,,>Name varchar( 100 ) NOT NULL CONSTRAINT chk_<tableName,,>_NameIsNotEmpty check ( datalength( ltrim( rtrim( <tableName,,>Name ) ) ) > 0 ),
 	
-	InsertedBy varchar( 100 ) not null constraint df_<tableName,,>_InsertedBy default replace( system_user, 'GRCORP\', '' ),
-	InsertDatetime datetime not null constraint df_<tableName,,>_InsertDatetime default getdate(),
-	LastUpdateBy varchar( 100 ) not null constraint df_<tableName,,>_LastUpdateBy default replace( system_user, 'GRCORP\', '' ),
-	LastUpdateDatetime datetime not null constraint df_<tableName,,>_LastUpdateDatetime default getdate(),
-	Revision int not null constraint df_<tableName,,>_Revision default 0,
-	constraint pk_<tableName,,>_Id primary key ( <tableName,,>Id )
+	InsertedBy varchar( 100 ) NOT NULL CONSTRAINT df_<tableName,,>_InsertedBy DEFAULT replace( system_user, 'GRCORP\', '' ),
+	InsertDatetime datetime NOT NULL CONSTRAINT df_<tableName,,>_InsertDatetime DEFAULT getdate(),
+	LastUpdateBy varchar( 100 ) NOT NULL CONSTRAINT df_<tableName,,>_LastUpdateBy DEFAULT replace( system_user, 'GRCORP\', '' ),
+	LastUpdateDatetime datetime NOT NULL CONSTRAINT df_<tableName,,>_LastUpdateDatetime DEFAULT getdate(),
+	Revision int NOT NULL CONSTRAINT df_<tableName,,>_Revision DEFAULT 0,
+	CONSTRAINT pk_<tableName,,>_Id primary key ( <tableName,,>Id )
 );
 
-go
+GO
 
-create unique nonclustered index ak_<tableName,,>_Name on <schemaName,,dbo>.<tableName,,> ( <tableName,,>Name );
+CREATE UNIQUE NONCLUSTERED INDEX ak_<tableName,,>_Name ON <schemaName,,dbo>.<tableName,,> ( <tableName,,>Name );
 
-go
+GO
 
-if object_id( N'tempdb..#DropNpop_<schemaName,,dbo><tableName,,>' ) is not null
-begin
+IF object_id( N'tempdb..#DropNpop_<schemaName,,dbo><tableName,,>' ) IS NOT NULL
+BEGIN
 
-	<HasId,-- ( no ),-- >set identity_insert <schemaName,,dbo>.<tableName,,> on;
+	<HasId,-- ( no ),-- >SET identity_INSERT <schemaName,,dbo>.<tableName,,> ON;
 
-	declare @sql nvarchar( max ) = ''; 
+	DECLARE @sql nvarchar( max ) = ''; 
 
-	select @sql += 
+	SELECT @sql += 
 		quotename( c1.name ) + ',' 
-	from sys.columns c1
-	join tempdb.sys.columns c2 on 
+	FROM sys.columns c1
+	JOIN tempdb.sys.columns c2 ON 
 		c2.name = c1.name and
 		c2.[object_id] = object_id( N'tempdb..#DropNpop_<schemaName,,dbo><tableName,,>' )
-	where c1.[object_id] = object_id( N'<schemaName,,dbo>.<tableName,,>' ) and 
+	WHERE c1.[object_id] = object_id( N'<schemaName,,dbo>.<tableName,,>' ) and 
 		c1.is_computed = 0;
 
-	set @sql = left( @sql, len( @sql ) - 1 );
+	SET @sql = left( @sql, len( @sql ) - 1 );
 		
-	set @sql = 
-	'insert <schemaName,,dbo>.<tableName,,> 
+	SET @sql = 
+	'INSERT <schemaName,,dbo>.<tableName,,> 
 		(' + @sql + ') 
-	select 
+	SELECT 
 		' + @sql + '
-	from #DropNpop_<schemaName,,dbo><tableName,,>;';
+	FROM #DropNpop_<schemaName,,dbo><tableName,,>;';
 
-	exec sp_executesql @sql;
+	EXEC sp_executesql @sql;
 
-	<HasId,-- ( no ),-- > set identity_insert <schemaName,,dbo>.<tableName,,> off;
+	<HasId,-- ( no ),-- > SET identity_INSERT <schemaName,,dbo>.<tableName,,> off;
 
-end;
+END;
 	
-go
+GO
 
-if exists ( select * 
-			from sys.objects 
-			where [object_id] = object_id( N'<schemaName,,dbo>.<tableName,,>' ) and 
+IF EXISTS ( SELECT * 
+			FROM sys.objects 
+			WHERE [object_id] = object_id( N'<schemaName,,dbo>.<tableName,,>' ) and 
 				[type] in ( N'U' ) )
-begin
-	print 'Created table <schemaName,,dbo>.<tableName,,> SUCCESSFULLY! At time ' + convert( varchar, getdate(), 126 );
-end;
+BEGIN
+	PRINT 'Created table <schemaName,,dbo>.<tableName,,> SUCCESSFULLY! At time ' + convert( varchar, getdate(), 126 );
+END;
 
 go
 
@@ -88,13 +88,13 @@ as
 <Creator,,petervandivier>		<CreateDate,,>	<Description,,TRIGGER to log update revisions>
 */
 begin
-	set nocount on;
+	SET nocount on;
 	
-	update <schemaName,,dbo>.<tableName,,> set 
+	update <schemaName,,dbo>.<tableName,,> SET 
 		LastUpdateBy = replace( system_user, 'GRCORP\', '' ),
 		LastUpdateDatetime = getdate(),
 		Revision += 1
-	from <schemaName,,dbo>.<tableName,,> a
-	join inserted b on a.<PK,,> = b.<PK,,>;
+	FROM <schemaName,,dbo>.<tableName,,> a
+	JOIN inserted b on a.<PK,,> = b.<PK,,>;
 end;
 go

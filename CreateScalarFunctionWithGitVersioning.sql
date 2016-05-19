@@ -5,7 +5,7 @@ IF object_id( N'<schema,sysname,dbo>.<name,sysname,udf_>' ) is null
 	EXEC sp_executesql N'create function <schema,sysname,dbo>.<name,sysname,udf_>() returns int as BEGIN return 0; end;';
 GO
 
-ALTER function <schema,sysname,dbo>.<name,sysname,udf_> 
+ALTER FUNCTION <schema,sysname,dbo>.<name,sysname,udf_> 
 (
 	<@Param1,,@> <Param1DataType,datatype,>
 )
