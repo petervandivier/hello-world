@@ -7,7 +7,7 @@ GO
 SET ANSI_NULLS, QUOTED_IDENTIFIER ON
 GO
 ALTER PROC <schemaName,,dbo>.<procName,,sp>
-	<@param1,,> <dataType1,,> = <Param1Default,,null>
+	<@param1,,@var> <dataType1,,> <Param1Default,,= null>
 /************************************************************************************************
 -- Description : <PurposeOfProc,,>
 -- Date 		Developer 		Issue# 		Description
@@ -16,7 +16,7 @@ ALTER PROC <schemaName,,dbo>.<procName,,sp>
 --***********************************************************************************************
 -- TESTING FRAMEWORK
 EXEC <schemaName,,dbo>.<procName,,sp> 
-	<@param1,,@> = <Param1Default,,null>;
+	<@param1,,@var> <Param1Default,,= null>;
 
 */
 AS
