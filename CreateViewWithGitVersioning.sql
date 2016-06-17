@@ -2,7 +2,7 @@ USE <DbName,sysname,>
 GO
 
 IF object_id( N'<schema,sysname,dbo>.<name,sysname,v>' ) IS NULL
-	EXEC sp_executesql N'CREATE VIEW <schema,sysname,dbo>.<name,sysname,v> SELECT a=1;';
+	EXEC sp_executesql N'CREATE VIEW <schema,sysname,dbo>.<name,sysname,v> AS SELECT a=1;';
 GO
 
 ALTER VIEW <schema,sysname,dbo>.<name,sysname,v> 
