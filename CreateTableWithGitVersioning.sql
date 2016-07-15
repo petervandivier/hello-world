@@ -23,10 +23,10 @@ CREATE TABLE <schemaName,,dbo>.<tableName,,>
 	<tableName,,>Id int NOT NULL identity,
 	<tableName,,>Name varchar( 100 ) NOT NULL CONSTRAINT chk_<tableName,,>_NameIsNotEmpty check ( datalength( ltrim( rtrim( <tableName,,>Name ) ) ) > 0 ),
 	
-	InsertedBy varchar( 100 ) NOT NULL CONSTRAINT df_<tableName,,>_InsertedBy DEFAULT replace( system_user, 'GRCORP\', '' ),
-	InsertDatetime datetime NOT NULL CONSTRAINT df_<tableName,,>_InsertDatetime DEFAULT getdate(),
+	InsertBy varchar( 100 ) NOT NULL CONSTRAINT df_<tableName,,>_InsertedBy DEFAULT replace( system_user, 'GRCORP\', '' ),
+	InsertDT datetime NOT NULL CONSTRAINT df_<tableName,,>_InsertDatetime DEFAULT getdate(),
 	LastUpdateBy varchar( 100 ) NOT NULL CONSTRAINT df_<tableName,,>_LastUpdateBy DEFAULT replace( system_user, 'GRCORP\', '' ),
-	LastUpdateDatetime datetime NOT NULL CONSTRAINT df_<tableName,,>_LastUpdateDatetime DEFAULT getdate(),
+	LastUpdateDT datetime NOT NULL CONSTRAINT df_<tableName,,>_LastUpdateDatetime DEFAULT getdate(),
 	Revision int NOT NULL CONSTRAINT df_<tableName,,>_Revision DEFAULT 0,
 	CONSTRAINT pk_<tableName,,>_Id primary key ( <tableName,,>Id )
 );

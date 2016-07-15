@@ -1,12 +1,12 @@
-﻿USE <DbName,,>
-GO
+﻿use <DbName,,>
+go
 
-IF object_id( N'<schemaName,,dbo>.<procName,,sp>' ) IS NULL
-	EXEC sp_executesql N'CREATE PROC <schemaName,,dbo>.<procName,,sp> AS BEGIN; RETURN 0; END;';
-GO
-SET ANSI_NULLS, QUOTED_IDENTIFIER ON
-GO
-ALTER PROC <schemaName,,dbo>.<procName,,sp>
+if object_id( N'<schemaName,,dbo>.<procName,,sp>' ) is null
+	exec sp_executesql N'CREATE PROC <schemaName,,dbo>.<procName,,sp> as begin; return 0; end;';
+go
+set ansi_nulls, quoted_identifier on;
+go
+alter proc <schemaName,,dbo>.<procName,,sp>
 	<@param1,,@var> <dataType1,,> <Param1Default,,= null>
 /************************************************************************************************
 -- Description : <PurposeOfProc,,>
@@ -15,16 +15,16 @@ ALTER PROC <schemaName,,dbo>.<procName,,sp>
 -- <Today,,>	<WhoAmI,,petervandivier>	<Issue#,,DAT-0000>	<Description1,,create proc>
 --***********************************************************************************************
 -- TESTING FRAMEWORK
-EXEC <schemaName,,dbo>.<procName,,sp> 
+exec <schemaName,,dbo>.<procName,,sp> 
 	<@param1,,@var> <Param1Default,,= null>;
 
 */
-AS
-BEGIN;
-	SET NOCOUNT ON;
-	SET TRAN ISOLATION LEVEL READ UNCOMMITTED;
+as
+begin
+	set nocount on;
+	set tran isolation level read uncommitted;
 
-	DECLARE
+	declare
 		@ProcName sysname = '<schemaName,,dbo>.<procName,,sp>',
 		@ProcRunDT datetime = getdate(),
 		@ErrMsg nvarchar( 4000 ) = '',
@@ -32,7 +32,7 @@ BEGIN;
 	
 ReturnResults:
 
-	RETURN 0;
-END;
+	return 0;
+end;
 
-GO
+go
