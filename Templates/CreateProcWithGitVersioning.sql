@@ -2,7 +2,7 @@
 go
 
 if object_id( N'<schemaName,,dbo>.<procName,,sp>' ) is null
-	exec sp_executesql N'CREATE PROC <schemaName,,dbo>.<procName,,sp> as begin; return 0; end;';
+	exec sp_executesql N'create proc <schemaName,,dbo>.<procName,,sp> as begin; return 0; end;';
 go
 set ansi_nulls, quoted_identifier on;
 go
