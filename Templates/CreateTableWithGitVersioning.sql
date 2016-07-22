@@ -68,15 +68,15 @@ begin
 
 end;
 	
-GO
+go
 
-IF EXISTS ( select * 
+if exists ( select * 
 			from sys.objects 
 			where [object_id] = object_id( N'<schemaName,,dbo>.<tableName,,>' ) and 
 				[type] in ( N'U' ) )
 begin
 	print 'created table <schemaName,,dbo>.<tableName,,> SUCCESSFULLY! At time ' + convert( varchar, getdate(), 126 );
-END;
+end;
 
 go
 
