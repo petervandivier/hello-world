@@ -24,6 +24,10 @@
 							<Item Name="SQL System Function" Foreground="0x00FF78DC" Background="0x02000000" BoldFont="No"/>
 							<Item Name="SQL System Table" Foreground="0x0080FF80" Background="0x02000000" BoldFont="No"/>
 							<Item Name="Template Parameter" Foreground="0x000000FF" Background="0x02000000" BoldFont="No"/>
+							<Item Name="urlformat" Foreground="0x0000FF00" Background="0x02000000" BoldFont="No"/>
+							<Item Name="XML Attribute Quotes" Foreground="0x00C0C0C0" Background="0x02000000" BoldFont="No"/>
+							<Item Name="XML Attribute Value" Foreground="0x00FFFF00" Background="0x02000000" BoldFont="No"/>
+							<Item Name="XML Delimiter" Foreground="0x00FFFFFF" Background="0x02000000" BoldFont="No"/>
 							<Item Name="XML Name" Foreground="0x000000FF" Background="0x02000000" BoldFont="No"/>
 							<Item Name="XML Text" Foreground="0x0000FF00" Background="0x02000000" BoldFont="No"/>
 						</Items>
