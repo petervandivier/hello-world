@@ -13,6 +13,7 @@
 							<Item Name="Plain Text" Foreground="0x00E4E4E4" Background="0x00323232" BoldFont="No"/>
 							<Item Name="outlining.collapsehintadornment" Foreground="0x00E8DDD7" Background="0x00808080" BoldFont="No"/>
 							<Item Name="Comment" Foreground="0x002DAFFF" Background="0x02000000" BoldFont="No"/>
+							<Item Name="HTML Attribute Value" Foreground="0x0000FF00" Background="0x02000000" BoldFont="No"/>
 							<Item Name="Identifier" Foreground="0x00FFFF00" Background="0x02000000" BoldFont="No"/>
 							<Item Name="Keyword" Foreground="0x00E4B07F" Background="0x02000000" BoldFont="No"/>
 							<Item Name="Script Comment" Foreground="0x002DAFFF" Background="0x02000000" BoldFont="No"/>
@@ -45,3 +46,21 @@
 		</Category>
 	</Category>
 </UserSettings>
+<!--
+Foreground Colors
+Value		Name
+0x00E4E4E4	Light Gray
+0x00E8DDD7	Tan
+0x002DAFFF	Light Blue
+0x0000FF00	Lime
+0x00FFFF00	Yellow
+0x00E4B07F	Light Brown
+0x0000FFFF	Teal
+0x00C7C7C7	Dark Gray
+0x0080FF80	Light Green
+0x00FF78DC	Pink
+0x000000FF	Blue
+0x00C0C0C0	Silver
+0x00FFFFFF	White
+
+-->
