@@ -4,3 +4,7 @@ This README is to test relative reference image links where you have to navigate
 
 ![great success!](../images/great-success.jpg) 
 
+Jump to the image directly by [clicking here](../images/great-success.jpg) 
+
+Email a person by [clicking here](mailto:foo@bar.edu) 
+
