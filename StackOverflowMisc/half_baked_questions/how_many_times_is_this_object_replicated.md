@@ -18,27 +18,47 @@ Rather than just noting on the issue log "*I checked all the publications that I
 
 plagiarized from [sqlwhisperer](https://sqlwhisper.wordpress.com/2013/09/03/list-of-replicated-db-objects/)...
 
-    Select Name from master.sys.databases where is_published = 1;
-    go
-    With ReplicationObjects as ( 
-    	Select pubid,artID,dest_object,dest_owner,objid,name from sysschemaarticles
-    	union
-    	Select pubid,artID,dest_table,dest_owner,objid,name from sysarticles
-    )
-    Select 
-    	Serverproperty('ServerName') as [PublisherServer],
-    	B.name as [PublisherName],
-    	DB_Name() as [PublisherDB],
-    	E.Name+'.'+A.Name as [PublisherTableName],
-    	D.Type_desc,
-    	A.dest_owner+'.'+A.dest_Object as [SubscriberTableName],
-    	C.dest_db as [SubscriberDB],
-    	C.srvname as [SubscriberServer]
-    From ReplicationObjects A
-    Inner Join syspublications B on A.pubid=B.pubid
-    Inner Join dbo.syssubscriptions C on C.artid=A.artid
-    Inner Join sys.objects D on A.objid=D.Object_id
-    Inner Join sys.schemas E on E.Schema_id=D.Schema_id
-    Where dest_db not in ('Virtual')
-    order by E.Name, A.Name; 
+
+	select
+		[name]
+	from master.sys.databases
+	where is_published = 1;
+	go
+	with ReplicationObjects as (
+		select
+			pubid,
+			artID,
+			dest_object,
+			dest_owner,
+			[objid],
+			[name]
+		from sysschemaarticles
+		union
+		select
+			pubid,
+			artID,
+			dest_table,
+			dest_owner,
+			[objid],
+			[name]
+		from sysarticles
+	)
+	select
+		serverproperty('ServerName') as PublisherServer,
+		B.[name] as PublisherName,
+		db_name() as PublisherDB,
+		E.[name]+'.'+A.[name] as PublisherTableName,
+		D.[Type_desc],
+		A.dest_owner+'.'+A.dest_Object as SubscriberTableName,
+		C.dest_db as SubscriberDB,
+		C.srvname as SubscriberServer
+	from ReplicationObjects A
+	inner join syspublications B on A.pubid = B.pubid
+	inner join dbo.syssubscriptions C on C.artid = A.artid
+	inner join sys.objects D on A.[objid] = D.[Object_id]
+	inner join sys.schemas E on E.[Schema_id] = D.[Schema_id]
+	where dest_db not in ( 'Virtual' )
+	order by
+		E.[name],
+		A.[name]; 
 
