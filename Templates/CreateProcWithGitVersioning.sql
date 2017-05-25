@@ -22,7 +22,6 @@ exec <schemaName,,dbo>.<procName,,sp>
 as
 begin
 	set nocount on;
-	set tran isolation level read uncommitted;
 
 	declare
 		@ProcName sysname = '<schemaName,,dbo>.<procName,,sp>',
