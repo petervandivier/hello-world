@@ -4,9 +4,7 @@ go
 -- drop table <schemaName,,dbo>.<tableName,,>;
 -- truncate table <schemaName,,dbo>.<tableName,,>;
 
-select * 
-from sys.foreign_keys fk 
-where fk.referenced_object_id = object_id(N'<schemaName,,dbo>.<tableName,,>');
+-- select * from sys.foreign_keys fk where fk.referenced_object_id = object_id(N'<schemaName,,dbo>.<tableName,,>');
 -- script these as DROP-AND-CREATE-TO and copy-pasta here
 
 go
