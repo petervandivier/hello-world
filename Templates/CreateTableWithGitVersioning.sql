@@ -70,8 +70,10 @@ begin
 		' + @sql + '
 	from #dropNpop_<schemaName,,dbo><tableName,,>;';
 
-	print @sql;
+	--print @sql;
 	exec sp_executesql @sql;
+
+	print convert(int,@@rowcount) + ' row(s) loaded into <schemaName,,dbo><tableName,,>.';
 
 	<HasId,default "no",-- > set identity_insert <schemaName,,dbo>.<tableName,,> off;
 end;
