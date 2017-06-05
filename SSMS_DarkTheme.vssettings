@@ -1,7 +1,12 @@
 <UserSettings>
-	<ApplicationIdentity version="10.0"/>
+	<ApplicationIdentity version="14.0"/>
 	<ToolsOptions>
 		<ToolsOptionsCategory name="Environment" RegisteredName="Environment"/>
+		<ToolsOptionsCategory name="TextEditor" RegisteredName="TextEditor">
+			<ToolsOptionsSubCategory name="SQL" RegisteredName="SQL" PackageName="Text Management Package">
+				<PropertyValue name="ShowLineNumbers">true</PropertyValue>
+			</ToolsOptionsSubCategory>
+		</ToolsOptionsCategory>
 	</ToolsOptions>
 	<Category name="Environment_Group" RegisteredName="Environment_Group">
 		<Category name="Environment_FontsAndColors" Category="{1EDA5DD4-927A-43a7-810E-7FD247D0DA1D}" Package="{DA9FB551-C724-11d0-AE1F-00A0C90FFFC3}" RegisteredName="Environment_FontsAndColors" PackageName="Visual Studio Environment Package">
@@ -44,6 +49,9 @@
 				</Categories>
 			</FontsAndColors>
 		</Category>
+	</Category>
+	<Category name="SQL_Editor" Category="{7d092b67-f9b8-4de4-a60e-298bada6f735}" Package="{cd5a6b66-0d89-4949-b356-361cf0d74372}" RegisteredName="SQL_Editor" PackageName="RadLangSvc.Package, RadLangSvc, Version=13.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91">
+		<PropertyValue name="TextCasing">1</PropertyValue>
 	</Category>
 </UserSettings>
 <!--
