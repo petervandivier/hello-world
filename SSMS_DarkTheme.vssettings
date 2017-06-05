@@ -3,6 +3,9 @@
 	<ToolsOptions>
 		<ToolsOptionsCategory name="Environment" RegisteredName="Environment"/>
 		<ToolsOptionsCategory name="TextEditor" RegisteredName="TextEditor">
+			<ToolsOptionsSubCategory name="General" RegisteredName="General" PackageName="Text Management Package">
+				<PropertyValue name="HighlightCurrentLine">false</PropertyValue>
+			</ToolsOptionsSubCategory>
 			<ToolsOptionsSubCategory name="SQL" RegisteredName="SQL" PackageName="Text Management Package">
 				<PropertyValue name="ShowLineNumbers">true</PropertyValue>
 			</ToolsOptionsSubCategory>
