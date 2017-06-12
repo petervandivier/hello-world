@@ -1,11 +1,11 @@
 ﻿use <DbName,,>
 go
-
-if object_id( N'<schemaName,,dbo>.<procName,,sp>' ) is null
-	exec sp_executesql N'create proc <schemaName,,dbo>.<procName,,sp> as begin; return 0; end;';
-go
 set ansi_nulls, quoted_identifier on;
 go
+if object_id('<schemaName,,dbo>.<procName,,sp>','P') is null
+	exec sp_executesql N'create proc <schemaName,,dbo>.<procName,,sp> as begin; return 0; end;';
+go
+
 alter proc <schemaName,,dbo>.<procName,,sp>
 	<@param1,,@var> <dataType1,,> <Param1Default,,= null>
 /************************************************************************************************
@@ -26,8 +26,8 @@ begin
 	declare
 		@ProcName sysname = '<schemaName,,dbo>.<procName,,sp>',
 		@ProcRunDT datetime = getdate(),
-		@ErrMsg nvarchar( 4000 ) = '',
-		@Lb char( 1 ) = char( 10 );
+		@ErrMsg nvarchar(4000) = '',
+		@Lb char(1) = char(10);
 	
 ReturnResults:
 
