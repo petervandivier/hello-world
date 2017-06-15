@@ -1,7 +1,7 @@
 use <DbName,sysname,>
 go
 
-if object_id( N'<schema,sysname,dbo>.<name,sysname,v>' ) is null
+if object_id( N'<schema,sysname,dbo>.<name,sysname,v>','V' ) is null
 	exec sp_executesql N'create view <schema,sysname,dbo>.<name,sysname,v> AS select a=1;';
 go
 

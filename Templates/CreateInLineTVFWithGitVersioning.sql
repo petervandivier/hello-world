@@ -1,12 +1,11 @@
 use <DbName,sysname,>
 go
 
-if object_id( N'<schema,sysname,dbo>.<name,sysname,itf>' ) is null
-	exec sp_executesql N'create function <schema,sysname,dbo>.<name,sysname,itf>() returns table as return(select a=1);';
+if object_id( N'<schema,sysname,dbo>.<name,sysname,>','TF' ) is null
+	exec sp_executesql N'create function <schema,sysname,dbo>.<name,sysname,>() returns table as return(select a=1);';
 go
 
-alter function <schema,sysname,dbo>.<name,sysname,itf> 
-(
+alter function <schema,sysname,dbo>.<name,sysname,> (
 	<@Param1,,@> <Param1DataType,datatype,>
 )
 returns table
@@ -19,13 +18,12 @@ as
 --***********************************************************************************************
 -- testing purposes 
 
-select * from <schema,sysname,dbo>.<name,sysname,itf>(<@TestParam1,,>); 
-select * from <schema,sysname,dbo>.<name,sysname,itf>(<@TestParam2,,>); 
-select * from <schema,sysname,dbo>.<name,sysname,itf>(<@TestParam3,,>); 
+select * from <schema,sysname,dbo>.<name,sysname,>(<@TestParam1,,>); 
+select * from <schema,sysname,dbo>.<name,sysname,>(<@TestParam2,,>); 
+select * from <schema,sysname,dbo>.<name,sysname,>(<@TestParam3,,>); 
 
 */
-return 
-(
+return (
 	select 
 	
 	from 

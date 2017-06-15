@@ -1,7 +1,7 @@
 use <DbName,sysname,>
 go
 
-if object_id( N'<schema,sysname,dbo>.<name,sysname,fn>' ) is null
+if object_id( N'<schema,sysname,dbo>.<name,sysname,fn>','FN' ) is null
 	exec sp_executesql N'create function <schema,sysname,dbo>.<name,sysname,fn>() returns int as begin return 0; end;';
 go
 

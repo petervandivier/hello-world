@@ -10,7 +10,7 @@ go
 go
 
 
-if object_id(N'<schemaName,,dbo>.<tableName,,>') is not null
+if object_id(N'<schemaName,,dbo>.<tableName,,>','U') is not null
 begin
 	set nocount on;
 	
@@ -46,7 +46,7 @@ go
 
 -- The below may function improperly if column names/datatypes/other metadata is altered
 -- It functions best for column addition or deletion from source code
-if object_id( N'tempdb..#dropNpop_<schemaName,,dbo><tableName,,>' ) is not null
+if object_id( N'tempdb..#dropNpop_<schemaName,,dbo><tableName,,>','U' ) is not null
 begin
 	<HasId,default "no",-- >set identity_insert <schemaName,,dbo>.<tableName,,> on;
 
@@ -80,7 +80,7 @@ end;
 
 go
 
-if object_id(N'<schemaName,,dbo>.<tableName,,>') is not null
+if object_id(N'<schemaName,,dbo>.<tableName,,>','U') is not null
 	print 'created table <schemaName,,dbo>.<tableName,,> SUCCESSFULLY! At time ' + convert(varchar,getdate(),126);
 go
 
