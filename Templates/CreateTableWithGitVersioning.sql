@@ -73,7 +73,7 @@ begin
 	--print @sql;
 	exec sp_executesql @sql;
 
-	print convert(varchar,@@rowcount) + ' row(s) loaded into <schemaName,,dbo><tableName,,>.';
+	print convert(varchar,@@rowcount) + ' row(s) loaded into [<schemaName,,dbo>].[<tableName,,>].';
 
 	<HasId,default "no",-- > set identity_insert <schemaName,,dbo>.<tableName,,> off;
 end;
