@@ -6,9 +6,7 @@ go
 
 -- select * from sys.foreign_keys fk where fk.referenced_object_id = object_id(N'<schemaName,,dbo>.<tableName,,>');
 -- script these as DROP-AND-CREATE-TO and copy-pasta here
-
 go
-
 
 if object_id(N'<schemaName,,dbo>.<tableName,,>','U') is not null
 begin
