@@ -1,7 +1,7 @@
 use <DbName,sysname,>
 go
 
-if object_id( N'<schema,sysname,dbo>.<name,sysname,>','TF' ) is null
+if object_id( N'<schema,sysname,dbo>.<name,sysname,>','IF' ) is null
 	exec sp_executesql N'create function <schema,sysname,dbo>.<name,sysname,>() returns table as return(select a=1);';
 go
 
