@@ -32,7 +32,7 @@ create table <schemaName,,dbo>.<tableName,,> (
 	InsertDT datetime not null constraint df_<tableName,,>_InsertDT default getdate(),
 	UpdateBy varchar( 100 ) not null constraint df_<tableName,,>_UpdateBy default system_user,
 	UpdateDT datetime not null constraint df_<tableName,,>_UpdateDT default getdate(),
-	Revision int not null constraint df_<tableName,,>_Revision default 0	
+	Revision int not null constraint df_<tableName,,>_Revision default 0
 );
 
 go
