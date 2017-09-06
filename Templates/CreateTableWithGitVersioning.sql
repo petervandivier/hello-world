@@ -1,5 +1,7 @@
 ﻿use <DbName,,>
 go
+set ansi_nulls, quoted_identifier on;
+go
 -- select * from <schemaName,,dbo>.<tableName,,>;
 -- drop table <schemaName,,dbo>.<tableName,,>;
 -- truncate table <schemaName,,dbo>.<tableName,,>;
