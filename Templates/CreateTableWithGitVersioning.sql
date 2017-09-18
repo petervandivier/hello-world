@@ -26,8 +26,9 @@ end;
 go
 
 create table <schemaName,,dbo>.<tableName,,> (
-	constraint pk_<tableName,,>_Id primary key ( Id ),
-	Id int not null identity,
+	constraint pk_<tableName,,>_Id primary key ( ID ),
+	constraint ak_<tableName,,>_Name unique ( [Name] ),
+	ID int not null identity,
 	[Name] varchar( 100 ) not null constraint chk_<tableName,,>_NameIsNotEmpty check (datalength(ltrim(rtrim([Name])))>0),
 	
 	InsertBy varchar( 100 ) not null constraint df_<tableName,,>_InsertBy default system_user,
@@ -36,12 +37,6 @@ create table <schemaName,,dbo>.<tableName,,> (
 	UpdateDT datetime not null constraint df_<tableName,,>_UpdateDT default getdate(),
 	Revision int not null constraint df_<tableName,,>_Revision default 0
 );
-
-go
-
-alter table <schemaName,,dbo>.<tableName,,> 
-	add constraint ak_<tableName,,>_Name unique ( [Name] );
-
 go
 
 -- The below may function improperly if column names/datatypes/other metadata is altered
