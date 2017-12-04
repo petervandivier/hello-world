@@ -14,5 +14,14 @@ test implicit self-reference dir link...
 2. [images]()
 3. [images/]()
 4. [/images/]()
-5. [/images/]()
+5. [/images]()
+
+none work :cry: 
+
+test qualified ref options.
+1. [images/foo](images/foo) 
+2. [images](images)
+3. [images/](images/)
+4. [/images/](/images/)
+5. [/images](/images)
 
