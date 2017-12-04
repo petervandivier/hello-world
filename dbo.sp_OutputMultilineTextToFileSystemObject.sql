@@ -40,7 +40,7 @@ exec dbo.sp_OutputMultilineTextToFileSystemObject
 --Donec vitae mauris purus. 
 --Fusce sagittis tempor sem, 
 --dignissim venenatis ante hendrerit non. ',
-	@DirectoryLocation = '\\grcorp.guaranteedrate.ad\gri\Tableau',
+	@DirectoryLocation = 'C:\',
 	@FsoName = 'var_out.txt';
 
 */
