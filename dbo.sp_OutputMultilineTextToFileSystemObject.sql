@@ -16,6 +16,7 @@ create or alter proc dbo.sp_OutputMultilineTextToFileSystemObject
 --------------- ------------------- ------------------------------------------------------------ 
 -- 2016-01-05	petervandivier	DAT-2925	create proc 
 -- 2016-03-19	petervandivier	DAT-3516	rtrim() & escape " in @SingleLineText. 
+-- 2018-12-07   petervandivier              add support for single line (by appending linefeed lololo)
 --*********************************************************************************************** 
 -- TESTING FRAMEWORK 
 exec dbo.sp_OutputMultilineTextToFileSystemObject 
@@ -93,7 +94,10 @@ begin
  
 -- escape if text is single line 
 	if @End = 0 
-		return -1; 
+    begin;
+        select @MultiLineText += @Delimiter;
+        select @End = charindex( @Delimiter, @MultiLineText ); 
+    end;
  
 	select @SingleLineText = substring( @MultiLineText, @Start, @End - @Start ); 
 	select @SingleLineText = rtrim( @SingleLineText ); 
