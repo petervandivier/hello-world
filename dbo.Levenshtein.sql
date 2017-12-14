@@ -16,7 +16,7 @@
 -- @max - Maximum distance allowed, or NULL if no maximum is desired. Returns NULL if distance will exceed @max.
 -- returns int edit distance, >= 0 representing the number of edits required to transform one string to the other.
 -- =============================================
-CREATE FUNCTION dbo.Levenshtein(
+CREATE OR ALTER FUNCTION dbo.Levenshtein(
     @s nvarchar(4000)
   , @t nvarchar(4000)
   , @max int
