@@ -47,7 +47,7 @@ WITH cte ( ID ) AS
 	WHERE ID < 12
 ) 
 INSERT dbo.Months ( ID, InsertBy, InsertDT, LastUpdateBy, LastUpdateDT, Revision )
-SELECT ID, 'pvandivier', getdate(), 'pvandivier', getdate(), 0
+SELECT ID, suser_sname(), getdate(), suser_sname(), getdate(), 0
 FROM cte;
 
 */

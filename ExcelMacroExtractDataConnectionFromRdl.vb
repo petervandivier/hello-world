@@ -19,7 +19,7 @@ Sub extractData()
         myDir = myDir + "\"
     End If
     
-    'myDir = "C:\Users\pvandivier\Desktop\Db_Pdb_Bv\"
+    'myDir = "C:\Users\peter\Desktop\Db_Pdb_Bv\"
 
     For Each cell In Range("rdl[fileName]")
 
