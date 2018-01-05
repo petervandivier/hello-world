@@ -25,3 +25,9 @@ test qualified ref options.
 4. [/images/](/images/)
 5. [/images](/images)
 
+```json
+{
+  "json code goes here" 
+   ...
+}
+```
