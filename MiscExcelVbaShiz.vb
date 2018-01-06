@@ -73,6 +73,16 @@ Function Reverse(Text As String) As String
     Reverse = StrNew
 End Function
 
+Function ReverseHex(Text As String) As String
+    Dim i As Integer
+    Dim StrNew As String
+    Dim strOld As String
+    strOld = Trim(Text)
+    For i = 1 To Len(strOld)
+      StrNew = Mid(strOld, ((i * 2) - 1), 2) & StrNew
+    Next i
+    ReverseHex = StrNew
+End Function
 
 Function getRGB1(rcell) As String
     Dim sColor As String
