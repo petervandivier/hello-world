@@ -269,7 +269,10 @@ exec dbo.#add_keyword_batch
      @keyword_list=''
     ,@source=''
     ,@type='NON-RESERVED'
-
+exec dbo.#add_keyword_batch
+     @keyword_list='Application'
+    ,@source='mark_1_eyeballs'
+    ,@type='NON-RESERVED'
 /*
 exec dbo.#add_keyword_batch
      @keyword_list=''
