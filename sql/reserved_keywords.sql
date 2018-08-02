@@ -270,7 +270,7 @@ exec dbo.#add_keyword_batch
     ,@source=''
     ,@type='NON-RESERVED'
 exec dbo.#add_keyword_batch
-     @keyword_list='Application,Event,Address,Name'
+     @keyword_list='Application,Event,Address,Name,Status'
     ,@source='mark_1_eyeballs'
     ,@type='NON-RESERVED'
 /*
