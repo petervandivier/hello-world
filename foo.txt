@@ -1,0 +1,10 @@
+thanks for the help, internet!
+
+links i used
+    https://medium.com/@trionkidnapper/ssh-keys-with-multiple-github-accounts-c67db56f191e
+    https://gist.github.com/jexchan/2351996
+    https://medium.freecodecamp.org/manage-multiple-github-accounts-the-ssh-way-2dadc30ccaca
+
+links i had open
+    https://tiffanybbrown.com/2017/06/using-multiple-ssh-keys-with-github/index.html
+    https://stackoverflow.com/questions/3225862/multiple-github-accounts-ssh-config
