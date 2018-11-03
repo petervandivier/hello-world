@@ -10,20 +10,20 @@ Am I GitHubbing??
 Is this how one GitsHub?
 
 test implicit self-reference dir link... 
-1. [images/foo]() 
-2. [images]()
-3. [images/]()
-4. [/images/]()
-5. [/images]()
+1. [img/foo]() 
+2. [img]()
+3. [img/]()
+4. [/img/]()
+5. [/img]()
 
 none work :cry: 
 
 test qualified ref options.
-1. [images/foo](images/foo) 
-2. [images](images)
-3. [images/](images/)
-4. [/images/](/images/)
-5. [/images](/images)
+1. [img/foo](img/foo) 
+2. [img](img)
+3. [img/](img/)
+4. [/img/](/img/)
+5. [/img](/img)
 
 ```json
 {
