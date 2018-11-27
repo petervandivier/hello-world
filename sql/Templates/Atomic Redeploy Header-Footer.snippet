@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<CodeSnippets  xmlns="http://schemas.microsoft.com/VisualStudio/2005/CodeSnippet">
+<_locDefinition xmlns="urn:locstudio">
+    <_locDefault _loc="locNone" />
+    <_locTag _loc="locData">Title</_locTag>
+    <_locTag _loc="locData">Description</_locTag>
+    <_locTag _loc="locData">Author</_locTag>
+    <_locTag _loc="locData">ToolTip</_locTag>
+</_locDefinition>
+	<CodeSnippet Format="1.0.0">
+		<Header>
+			<Title>Atomic Redeploy Header-Footer</Title>
+                        <Shortcut></Shortcut>
+			<Description>Code Snippet for Begin...End block.</Description>
+			<Author>Microsoft Corporation</Author>
+			<SnippetTypes>
+                                <SnippetType>SurroundsWith</SnippetType>
+			</SnippetTypes>
+		</Header>
+		<Snippet>
+			<Declarations></Declarations>
+			<Code Language="SQL"><![CDATA[use <DbName,,>
+go
+set ansi_nulls, quoted_identifier on;
+go
+-- select * from <schemaName,,dbo>.<tableName,,>;
+-- drop table <schemaName,,dbo>.<tableName,,>;
+-- truncate table <schemaName,,dbo>.<tableName,,>;
+
+-- select * from sys.foreign_keys fk where fk.referenced_object_id = object_id(N'<schemaName,,dbo>.<tableName,,>');
+-- script these as DROP-AND-CREATE-TO and copy-pasta here
+go
+
+if object_id(N'<schemaName,,dbo>.<tableName,,>','U') is not null
+begin
+	set nocount on;
+	
+-- set this to a local table instead of a #temp_table for post-deploy audit
+	select * 
+	into #dropNpop_<schemaName,,dbo><tableName,,>
+	from <schemaName,,dbo>.<tableName,,>;
+
+	drop table <schemaName,,dbo>.<tableName,,>;
+-- drop table if exists N'<schemaName,,dbo>.<tableName,,>';
+	print 'dropped table <schemaName,,dbo>.<tableName,,> SUCCESSFULLY! At time ' + convert(varchar,getdate(),126);
+end;
+go
+
+$selected$ $end$
+
+-- The below may function improperly if column names/datatypes/other metadata is altered
+-- It functions best for column addition or deletion from source code
+if object_id( N'tempdb..#dropNpop_<schemaName,,dbo><tableName,,>','U' ) is not null
+begin
+	<HasId,default "no",-- >set identity_insert <schemaName,,dbo>.<tableName,,> on;
+
+	declare @sql nvarchar(max) = ''; 
+
+	select @sql += 
+		quotename( c1.[name] ) + ',' 
+	from sys.columns c1
+	join tempdb.sys.columns c2 on 
+		c2.[name] = c1.[name] and
+		c2.[object_id] = object_id(N'tempdb..#dropNpop_<schemaName,,dbo><tableName,,>')
+	where c1.[object_id] = object_id(N'<schemaName,,dbo>.<tableName,,>') and 
+		c1.is_computed = 0;
+
+	set @sql = left( @sql, len( @sql ) - 1 ); -- trim last comma
+		
+	set @sql = 
+	'insert <schemaName,,dbo>.<tableName,,> 
+		(' + @sql + ') 
+	select 
+		' + @sql + '
+	from #dropNpop_<schemaName,,dbo><tableName,,>;';
+
+	--print @sql;
+	exec sp_executesql @sql;
+
+	print convert(varchar,@@rowcount) + ' row(s) loaded into [<schemaName,,dbo>].[<tableName,,>].';
+
+	<HasId,default "no",-- > set identity_insert <schemaName,,dbo>.<tableName,,> off;
+end;
+
+go
+
+if object_id(N'<schemaName,,dbo>.<tableName,,>','U') is not null
+	print 'created table <schemaName,,dbo>.<tableName,,> SUCCESSFULLY! At time ' + convert(varchar,getdate(),126);
+go
+
+]]>
+			</Code>
+		</Snippet>
+	</CodeSnippet>
+</CodeSnippets>

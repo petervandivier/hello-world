@@ -1,0 +1,36 @@
+Which git moved and modified file is bugging my icon cache?
+
+tortoisegit git icons caching
+
+
+
+ToroiseGit is awesome! Sadly though it doesn't always play nice with `git mv` when also modifying the contents of a file in the same commit. Consider the following scenario.
+
+    mkdir demo
+    cd demo
+    git init
+    mkdir foo bar
+    echo bar > bar/bar
+    echo bar > bar/foo # oops!
+    git add .
+    git commit -m "init commit"
+
+...oops, well I better fix that.
+
+    echo foo > bar/foo
+    git mv bar/foo foo/foo
+    git add .
+    git commit -m "un-bar'd the foo"
+
+Much better! But wait... what's up with my iconcache? 
+
+
+----
+
+I have a repo for which TortoiseGit is showing modified for a fresh clone. I have tried. 
+
+* [`git config core.fileMode false`](https://stackoverflow.com/a/1580644/4709762)
+* uninstall/reinstall of TortoiseGit
+* advancing the branch
+
+`git status` shows `nothing to commit, working tree clean`
