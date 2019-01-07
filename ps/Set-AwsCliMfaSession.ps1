@@ -1,3 +1,5 @@
+# TODO: dispose of vars properly... 
+# not sure atm  why they persist in caller scope when dot-sourced :\
 [cmdletbinding()]param(
      [Parameter(Mandatory=$true)]$AWS_MFA_Code
     ,$AwsProfile = "default"
