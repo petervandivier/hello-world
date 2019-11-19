@@ -1,5 +1,29 @@
 
 function Format-SqlValues {
+<#
+.DESCRIPTION
+    Returns a valid "INSERT INTO {object} VALUES {...};" statement
+
+.PARAMETER InputObject
+    Generic PSObject, probably Import-Csv. pipelineable.
+
+.PARAMETER TableName
+    The target table to be inserted against. Returns "{0}" token if not supplied
+
+.PARAMETER TypeMap
+    Hashtable to set datatypes of individual columns in the InputObject
+
+.PARAMETER BatchSize
+    The number of rows per insert statement. Defaults to 1000 (SQL Server max batch size).
+    NULL BatchSize will provide a single batch
+
+.TODO
+    Add-back -Pretty & -Everything is text switches
+    Test handling of $InputObject with nested properties (detect arrays)
+    Handle non-text types in $InputObject
+
+
+#>
     [CmdletBinding()]
     param (
         [Parameter(ValueFromPipeline=$true)]
@@ -13,14 +37,7 @@ function Format-SqlValues {
         $TableName,
         [Parameter()]
         [hashtable]
-        $TypeMap,
-        [Parameter()]
-        [Alias('Pretty')]
-        [switch]
-        $Aligned,
-        [Parameter()]
-        [switch]
-        $EverythingIsText
+        $TypeMap
     )
 
     begin {
