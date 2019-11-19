@@ -21,12 +21,13 @@ function Format-SqlValues {
     Add-back -Pretty & -Everything is text switches
     Test handling of $InputObject with nested properties (detect arrays)
     Handle non-text types in $InputObject
-
+    Support ValueFromPipeline for -InputObject
+    Default ordinal sort $Columns on same key as $InputObject[0].PSObject.Properties.Name
 
 #>
     [CmdletBinding()]
     param (
-        [Parameter(ValueFromPipeline=$true)]
+        [Parameter()]
         $InputObject,
         [Parameter()]
         [ValidateRange("NonNegative")]
@@ -135,19 +136,19 @@ VALUES
                     Default { "'$($row.$column -replace "'", "''")'";         break }
                 }
                 
-                $value = "$value,"
+                # $value = "$value,"
                 
                 $value.PadRight($pad + 3)
             }
 
-            ("(", ($literals -join ' '), ")") -join ''
+            ("(", ($literals -join ','), ")") -join ''
         }
 
         $output = for($i = 0; $i -lt $RowCount; $i += $BatchSize){
             @(
                 $BATCH_HEADER
                 $valuesArray[$i..($i + $BatchSize - 1)] -join ",`n"
-                ";"
+                ";`n`n"
             ) -join ''
         }
 
