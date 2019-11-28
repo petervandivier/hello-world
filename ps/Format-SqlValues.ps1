@@ -98,21 +98,22 @@ INSERT INTO {1}
 VALUES
 
 "@
-    # TODO: Pad Column Header for non-expanded 
+
     $LB_TAB = "`n    "
     $LEAD = if($Expanded){"$LB_TAB"}else{""}
     $TAIL = if($Expanded){"`n"}else{""}
     
     $DELIMITER = if($Expanded){",$LB_TAB"}else{","}
-    $COLUMN_HEADER = ($ColumnNames -join $DELIMITER)
-    $COLUMN_HEADER = "($LEAD$COLUMN_HEADER$TAIL)"
-    $BATCH_HEADER = $BATCH_HEADER -f $COLUMN_HEADER, '{0}'
 
     foreach($column in $ColumnNames) {
         $group = $InputObject.$column | Group-Object 
     
         [int]$MaxLength = ($group.Name | Measure-Object -Maximum -Property Length).Maximum
         
+        if($MaxLength -lt $column.Length){
+            $MaxLength = $column.Length
+        }
+
         $Columns.$column.Add('MaxLength',$MaxLength)
         
         $group | ForEach-Object {
@@ -148,8 +149,6 @@ VALUES
                 Default { "'$($row.$column -replace $q,$qq)'";         break }
             }
             
-            # $value = "$value,"
-            
             if($Expanded) {
                 $value
             } else {
@@ -159,6 +158,17 @@ VALUES
 
         ("(", $LEAD, ($literals -join $DELIMITER), $TAIL, ")") -join ''
     }
+
+
+    $COLUMN_HEADER = ($ColumnNames | ForEach-Object{
+        if($Expanded){
+            $_ 
+        } else {
+            $_.PadRight($Columns.$_.MaxLength + 3)
+        }
+    }) -join $DELIMITER
+    $COLUMN_HEADER = "($LEAD$COLUMN_HEADER$TAIL)"
+    $BATCH_HEADER = $BATCH_HEADER -f $COLUMN_HEADER, '{0}'
 
     $output = if($RowCount -eq 1){
         @(
