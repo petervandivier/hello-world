@@ -3,7 +3,7 @@ function dsh {
 .DESCRIPTION
     Danger SHell - "just go there". saves typing when you don't care 
       and sure as shit don't want to trust this host
-    HT @chrisident in pwsh community slack for the assist
+    HT @indented-automation the assist
 #>
     ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no @args 
 }
@@ -13,7 +13,7 @@ function dcp {
 .DESCRIPTION
     Danger Copy - "just get it there". saves typing when you don't care 
       and sure as shit don't want to trust this host
-    HT @chrisident in pwsh community slack for the assist
+    HT @indented-automation the assist
 #>
     scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no @args 
 }

@@ -18,11 +18,9 @@ function Format-SqlValues {
     NULL BatchSize will provide a single batch
 
 .TODO
-    Add-back -Pretty & -Everything is text switches
+    Add -Pretty, -Everything, & -Compact as text switches
     Test handling of $InputObject with nested properties (detect arrays)
     Handle non-text types in $InputObject
-    Support ValueFromPipeline for -InputObject
-    Default ordinal sort $Columns on same key as $InputObject[0].PSObject.Properties.Name
 
 #>
     [CmdletBinding()]
@@ -74,7 +72,9 @@ function Format-SqlValues {
     } | 
     Select-Object -Unique | 
     ForEach-Object {
+        $i += 1
         $Columns.Add($PSItem, @{
+            Order     = $i
             Type      = $null
             TypeCount = @{
                 EMPTY    = 0
@@ -91,7 +91,7 @@ function Format-SqlValues {
         $Columns.$key.Type = $type
     }
 
-    $ColumnNames = $Columns.Keys 
+    $ColumnNames = ($Columns.GetEnumerator() | Sort-Object { $_.Value.Order }).Name 
     $BATCH_HEADER = @"
 INSERT INTO {1} 
 {0}
