@@ -27,7 +27,7 @@ function Format-SqlValues {
 #>
     [CmdletBinding()]
     param (
-        [Parameter()]
+        [Parameter(ValueFromPipeline=$true)]
         $InputObject,
         
         [Parameter()]
