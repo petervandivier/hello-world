@@ -29,16 +29,23 @@ function Format-SqlValues {
     param (
         [Parameter()]
         $InputObject,
+        
         [Parameter()]
         [ValidateRange("NonNegative")]
         [int]
         $BatchSize = 1000,
+        
         [Parameter()]
         [string]
         $TableName,
+
         [Parameter()]
         [hashtable]
-        $TypeMap
+        $TypeMap,
+
+        [Parameter()]
+        [switch]
+        $Expanded
     )
 
     function Get-DataType {
@@ -91,9 +98,14 @@ INSERT INTO {1}
 VALUES
 
 "@
-    # TODO: Pad Column Header
-    $COLUMN_HEADER = ($ColumnNames -join ',')
-    $COLUMN_HEADER = "($COLUMN_HEADER)"
+    # TODO: Pad Column Header for non-expanded 
+    $LB_TAB = "`n    "
+    $LEAD = if($Expanded){"$LB_TAB"}else{""}
+    $TAIL = if($Expanded){"`n"}else{""}
+    
+    $DELIMITER = if($Expanded){",$LB_TAB"}else{","}
+    $COLUMN_HEADER = ($ColumnNames -join $DELIMITER)
+    $COLUMN_HEADER = "($LEAD$COLUMN_HEADER$TAIL)"
     $BATCH_HEADER = $BATCH_HEADER -f $COLUMN_HEADER, '{0}'
 
     foreach($column in $ColumnNames) {
@@ -138,10 +150,14 @@ VALUES
             
             # $value = "$value,"
             
-            $value.PadRight($pad + 3)
+            if($Expanded) {
+                $value
+            } else {
+                $value.PadRight($pad + 3)
+            }
         }
 
-        ("(", ($literals -join ','), ")") -join ''
+        ("(", $LEAD, ($literals -join $DELIMITER), $TAIL, ")") -join ''
     }
 
     $output = if($RowCount -eq 1){
