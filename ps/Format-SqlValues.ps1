@@ -120,6 +120,9 @@ VALUES
         }
     }
 
+    $q = "'"
+    $qq = "''"
+
     $valuesArray = foreach($row in $InputObject){
         $literals = foreach($column in $ColumnNames){
             $pad = $Columns.$column.MaxLength
@@ -130,7 +133,7 @@ VALUES
                 { $_ -eq "DATETIME" } { "'$($row.$column)'";              break }
                 { $_ -eq "NUMERIC" }  { Invoke-Expression ($row.$column); break }
                 { $_ -eq "BOOL" }     { "'$($row.$column)'";              break }
-                Default { "'$($row.$column -replace "'", "''")'";         break }
+                Default { "'$($row.$column -replace $q,$qq)'";         break }
             }
             
             # $value = "$value,"
@@ -141,12 +144,20 @@ VALUES
         ("(", ($literals -join ','), ")") -join ''
     }
 
-    $output = for($i = 0; $i -lt $RowCount; $i += $BatchSize){
+    $output = if($RowCount -eq 1){
         @(
             $BATCH_HEADER
-            $valuesArray[$i..($i + $BatchSize - 1)] -join ",`n"
+            $valuesArray
             ";`n`n"
         ) -join ''
+    } else {
+        for($i = 0; $i -lt $RowCount; $i += $BatchSize){
+            @(
+                $BATCH_HEADER
+                $valuesArray[$i..($i + $BatchSize - 1)] -join ",`n"
+                ";`n`n"
+            ) -join ''
+        }
     }
 
     if($TableName){
