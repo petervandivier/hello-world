@@ -25,7 +25,7 @@ function Format-SqlValues {
 #>
     [CmdletBinding()]
     param (
-        [Parameter(ValueFromPipeline=$true)]
+        [Parameter()]
         $InputObject,
         
         [Parameter()]
@@ -65,6 +65,7 @@ function Format-SqlValues {
     $Columns = @{}
     $RowCount = $InputObject.Count
     if($null -eq $BatchSize){$BatchSize = $RowCount}
+    Write-Verbose "$RowCount row(s)"
 
     $InputObject | 
     ForEach-Object {
