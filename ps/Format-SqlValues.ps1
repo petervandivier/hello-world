@@ -26,6 +26,7 @@ function Format-SqlValues {
     [CmdletBinding()]
     param (
         [Parameter(ValueFromPipeline=$true)]
+        [PSObject[]]
         $InputObject,
         
         [Parameter()]
@@ -46,149 +47,162 @@ function Format-SqlValues {
         $Expanded
     )
 
-    function Get-DataType {
-        [CmdletBinding()]
-        param (
-            [Parameter()]
-            [string]
-            $InputObject
-        )
-        switch ($InputObject) {
-            {$_ -in ("NULL",$null)}         { "EMPTY";    break }
-            {$_ -as [datetime]}             { "DATETIME"; break }
-            {$null -ne ($_ -as [decimal])}  { "NUMERIC";  break }
-            {$_ -in ('TRUE','FALSE')}       { "BOOL";     break }
-            Default                         { "STRING";   break }
-        }
-    }
-
-    $Columns = @{}
-    $RowCount = $InputObject.Count
-    if($null -eq $BatchSize){$BatchSize = $RowCount}
-
-    $InputObject | 
-    ForEach-Object {
-        $PSItem.PSObject.Properties.Name
-    } | 
-    Select-Object -Unique | 
-    ForEach-Object {
-        $i += 1
-        $Columns.Add($PSItem, @{
-            Order     = $i
-            Type      = $null
-            TypeCount = @{
-                EMPTY    = 0
-                DATETIME = 0
-                NUMERIC  = 0
-                BOOL     = 0
-                STRING   = 0
+    begin{
+        function Get-DataType {
+            [CmdletBinding()]
+            param (
+                [Parameter()]
+                [string]
+                $InputObject
+            )
+            switch ($InputObject) {
+                {$_ -in ("NULL",$null)}         { "EMPTY";    break }
+                {$_ -as [datetime]}             { "DATETIME"; break }
+                {$null -ne ($_ -as [decimal])}  { "NUMERIC";  break }
+                {$_ -in ('TRUE','FALSE')}       { "BOOL";     break }
+                Default                         { "STRING";   break }
             }
-        })
-    }
+        }
 
-    foreach($key in $TypeMap.Keys) {
-        $type = $TypeMap.$key
-        $Columns.$key.Type = $type
-    }
+        $Columns = @{}
 
-    $ColumnNames = ($Columns.GetEnumerator() | Sort-Object { $_.Value.Order }).Name 
-    $BATCH_HEADER = @"
+        $InputObject | 
+        ForEach-Object {
+            $PSItem.PSObject.Properties.Name
+        } | 
+        Select-Object -Unique | 
+        ForEach-Object {
+            $i += 1
+            $Columns.Add($PSItem, @{
+                Order     = $i
+                Type      = $null
+                TypeCount = @{
+                    EMPTY    = 0
+                    DATETIME = 0
+                    NUMERIC  = 0
+                    BOOL     = 0
+                    STRING   = 0
+                }
+            })
+        }
+
+        foreach($key in $TypeMap.Keys) {
+            $type = $TypeMap.$key
+            $Columns.$key.Type = $type
+        }
+
+        $ColumnNames = ($Columns.GetEnumerator() | Sort-Object { $_.Value.Order }).Name 
+        $BATCH_HEADER = @"
 INSERT INTO {1} 
 {0}
 VALUES
 
 "@
 
-    $LB_TAB = "`n    "
-    $LEAD = if($Expanded){"$LB_TAB"}else{""}
-    $TAIL = if($Expanded){"`n"}else{""}
-    
-    $DELIMITER = if($Expanded){",$LB_TAB"}else{","}
-
-    foreach($column in $ColumnNames) {
-        $group = $InputObject.$column | Group-Object 
-    
-        [int]$MaxLength = ($group.Name | Measure-Object -Maximum -Property Length).Maximum
+        $LB_TAB = "`n    "
+        $LEAD = if($Expanded){"$LB_TAB"}else{""}
+        $TAIL = if($Expanded){"`n"}else{""}
         
-        if($MaxLength -lt $column.Length){
-            $MaxLength = $column.Length
-        }
+        $DELIMITER = if($Expanded){",$LB_TAB"}else{","}
 
-        $Columns.$column.Add('MaxLength',$MaxLength)
-        
-        $group | ForEach-Object {
-            $DataType = (Get-DataType $_.Name)
-            $Columns.$column.TypeCount.$DataType += $_.Count
-        }
-
-        if($null -eq $Columns.$column.Type){
-            $DataType = switch ($Columns.$column.TypeCount) {
-                {$_.EMPTY -eq $RowCount}                 { "EMPTY";    break }
-                {($_.DATETIME + $_.EMPTY) -eq $RowCount} { "DATETIME"; break }
-                {($_.NUMERIC + $_.EMPTY) -eq $RowCount}  { "NUMERIC";  break }
-                {($_.BOOL + $_.EMPTY) -eq $RowCount}     { "BOOL";     break }
-                default                                  { "STRING";   break }
-            }
-            $Columns.$column.Type = $DataType
-        }
+        $RowSet = [System.Collections.Generic.List[PSObject]]::new()
     }
 
-    $q = "'"
-    $qq = "''"
+    process {
+        $RowSet.AddRange($InputObject)
 
-    $valuesArray = foreach($row in $InputObject){
-        $literals = foreach($column in $ColumnNames){
-            $pad = $Columns.$column.MaxLength
+        $RowCount = $RowSet.Count
+        if($null -eq $BatchSize){$BatchSize = $RowCount}
+        Write-Verbose "$RowCount row(s)"
+
+
+        foreach($column in $ColumnNames) {
+            $group = $InputObject.$column | Group-Object 
+        
+            [int]$MaxLength = ($group.Name | Measure-Object -Maximum -Property Length).Maximum
             
-            [string]$value = switch ($Columns.$column.Type) {
-                { [string]::IsNullOrEmpty($row.$column) } { "NULL"; break }
-                { $_ -eq "EMPTY" }    { "NULL";                           break }
-                { $_ -eq "DATETIME" } { "'$($row.$column)'";              break }
-                { $_ -eq "NUMERIC" }  { Invoke-Expression ($row.$column); break }
-                { $_ -eq "BOOL" }     { "'$($row.$column)'";              break }
-                Default { "'$($row.$column -replace $q,$qq)'";         break }
+            if($MaxLength -lt $column.Length){
+                $MaxLength = $column.Length
             }
+
+            $Columns.$column.Add('MaxLength',$MaxLength)
             
-            if($Expanded) {
-                $value
+            $group | ForEach-Object {
+                $DataType = (Get-DataType $_.Name)
+                $Columns.$column.TypeCount.$DataType += $_.Count
+            }
+
+            if($null -eq $Columns.$column.Type){
+                $DataType = switch ($Columns.$column.TypeCount) {
+                    {$_.EMPTY -eq $RowCount}                 { "EMPTY";    break }
+                    {($_.DATETIME + $_.EMPTY) -eq $RowCount} { "DATETIME"; break }
+                    {($_.NUMERIC + $_.EMPTY) -eq $RowCount}  { "NUMERIC";  break }
+                    {($_.BOOL + $_.EMPTY) -eq $RowCount}     { "BOOL";     break }
+                    default                                  { "STRING";   break }
+                }
+                $Columns.$column.Type = $DataType
+            }
+        }
+
+        $q = "'"
+        $qq = "''"
+
+        $valuesArray = foreach($row in $InputObject){
+            $literals = foreach($column in $ColumnNames){
+                $pad = $Columns.$column.MaxLength
+                
+                [string]$value = switch ($Columns.$column.Type) {
+                    { [string]::IsNullOrEmpty($row.$column) } { "NULL"; break }
+                    { $_ -eq "EMPTY" }    { "NULL";                           break }
+                    { $_ -eq "DATETIME" } { "'$($row.$column)'";              break }
+                    { $_ -eq "NUMERIC" }  { Invoke-Expression ($row.$column); break }
+                    { $_ -eq "BOOL" }     { "'$($row.$column)'";              break }
+                    Default { "'$($row.$column -replace $q,$qq)'";         break }
+                }
+                
+                if($Expanded) {
+                    $value
+                } else {
+                    $value.PadRight($pad + 3)
+                }
+            }
+
+            ("(", $LEAD, ($literals -join $DELIMITER), $TAIL, ")") -join ''
+        }
+
+
+        $COLUMN_HEADER = ($ColumnNames | ForEach-Object{
+            if($Expanded){
+                $_ 
             } else {
-                $value.PadRight($pad + 3)
+                $_.PadRight($Columns.$_.MaxLength + 3)
             }
-        }
+        }) -join $DELIMITER
+        $COLUMN_HEADER = "($LEAD$COLUMN_HEADER$TAIL)"
+        $BATCH_HEADER = $BATCH_HEADER -f $COLUMN_HEADER, '{0}'
 
-        ("(", $LEAD, ($literals -join $DELIMITER), $TAIL, ")") -join ''
-    }
-
-
-    $COLUMN_HEADER = ($ColumnNames | ForEach-Object{
-        if($Expanded){
-            $_ 
-        } else {
-            $_.PadRight($Columns.$_.MaxLength + 3)
-        }
-    }) -join $DELIMITER
-    $COLUMN_HEADER = "($LEAD$COLUMN_HEADER$TAIL)"
-    $BATCH_HEADER = $BATCH_HEADER -f $COLUMN_HEADER, '{0}'
-
-    $output = if($RowCount -eq 1){
-        @(
-            $BATCH_HEADER
-            $valuesArray
-            ";`n`n"
-        ) -join ''
-    } else {
-        for($i = 0; $i -lt $RowCount; $i += $BatchSize){
+        $output = if($RowCount -eq 1){
             @(
                 $BATCH_HEADER
-                $valuesArray[$i..($i + $BatchSize - 1)] -join ",`n"
+                $valuesArray
                 ";`n`n"
             ) -join ''
+        } else {
+            for($i = 0; $i -lt $RowCount; $i += $BatchSize){
+                @(
+                    $BATCH_HEADER
+                    $valuesArray[$i..($i + $BatchSize - 1)] -join ",`n"
+                    ";`n`n"
+                ) -join ''
+            }
         }
     }
 
-    if($TableName){
-        $output =  $output -f $TableName
-    }
+    end {
+        if($TableName){
+            $output =  $output -f $TableName
+        }
 
-    $output
+        $output
+    }
 }
