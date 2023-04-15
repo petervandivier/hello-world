@@ -1,4 +1,5 @@
-# gitattributes file #
+
+*.sql linguist-language=TSQL
 
 *.sql text
 
