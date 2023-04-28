@@ -13,7 +13,7 @@ MSDB does not by default support SSMS-generated DB diagrams. Even when you resto
 
 Fortunately, we can extract `object_definition(object_id('sp_delete_backuphistory'))`. The ordering observed in the SProc definition matches what we see in the following diagram found on [this blog post][1] (numbering added to denote deletion order)
 
-![backup-erd.png](/backup-erd.png)
+![backup-erd.png](backup-erd.png)
 
 Sadly, the following query evidences what is implied by the SProc - that per-table, there is very little to filter by in the way of timestamps...
 
