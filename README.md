@@ -31,3 +31,19 @@ test qualified ref options.
    ...
 }
 ```
+
+# ChangeLog (pretend)
+
+Given the way GH links strip periods from markdown headers, how does it handle a valid clash? 
+
+Both of the following are expected to shorten to `#01011`
+
+## 0.101.1
+
+oh dot one-hundred-one dot one
+
+## 0.10.11
+
+oh dot ten dot eleven
+
+
