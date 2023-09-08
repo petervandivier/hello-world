@@ -36,7 +36,9 @@ test qualified ref options.
 
 Given the way GH links strip periods from markdown headers, how does it handle a valid clash? 
 
-Both of the following are expected to shorten to `#01011`
+Both of the following are expected to shorten to `#01011`. 
+
+In fact... the second instance of the header shortens to `#01011-1`. [TIL](https://youtu.be/GD6qtc2_AQA)
 
 ## 0.101.1
 
